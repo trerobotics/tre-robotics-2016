@@ -56,14 +56,12 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+
             //Update the values of the joystick
             JoyStickVals();
 
             //method for moving the bottom fork
             MoveFork();
-
-            //method for using the arm
-            //Thrower();
 
             //set power of the wheels
             robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
@@ -79,7 +77,9 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
     public void JoyStickVals() {
         //Update Joystick values
         input1Y = Math.pow(-gamepad1.left_stick_y, 2);
+
         input1X = Math.pow(gamepad1.left_stick_x, 2);
+
         input1Z = Math.pow(gamepad1.right_stick_x, 2);
     }
 
@@ -90,10 +90,10 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
         //open position
         int openPos = 180;
 
-        //this corresponds to the a button on gamepad 2
+        // Corresponds to the a button on gamepad 2
         boolean aButton = gamepad2.a;
 
-        //This corresponds to the b button on gamepad 2
+        // Corresponds to the b button on gamepad 2
         boolean bButton = gamepad2.b;
 
         if(aButton)
@@ -110,19 +110,4 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
             telemetry.update();
         }
     }
-
-    /*public void Thrower()
-    {
-        float armDownButton = -gamepad2.left_trigger;
-        float armUpButton = gamepad2.right_trigger;
-
-        robot.Catapulter.setPower(Range.clip(armDownButton + armUpButton, -1, 1));
-
-
-        if (armDownButton > 0 || armUpButton > 0)
-        {
-            telemetry.addData("Say", "Arm is moving.");
-            telemetry.update();
-        }
-    }*/
 }
