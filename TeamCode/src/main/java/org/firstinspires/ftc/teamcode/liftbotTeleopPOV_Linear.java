@@ -57,30 +57,23 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Liftbot: Teleop POV", group="liftbot")
-@Disabled
+@TeleOp(name="TeleOp: linear Controls", group="liftbot")
+
 public class liftbotTeleopPOV_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareLiftBot robot           = new HardwareLiftBot();   // Use a Pushbot's hardware
                                                                // could also use HardwarePushbotMatrix class.
-    double          clawOffset      = 0;                       // Servo mid position
-    final double    CLAW_SPEED      = 0.02 ;                   // sets rate to move servo
+
+    double input1Y, input1X, input1Z;
 
     @Override
     public void runOpMode() {
-        //double input1Y,
-               //input1X,
-               //input2X;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-        /*robot.init(hardwareMap);
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Say", "Hello Driver");    //
-        telemetry.update();
+        robot.init(hardwareMap);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -88,46 +81,58 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            input1Y = -gamepad1.left_stick_y;
-            input1X = gamepad1.left_stick_x;
-            input2X = gamepad1.left_stick_x;
+            //Update the values of the joystick
+            JoyStickVals();
 
-            Range.clip(input1Y, -1, 1);
-            Range.clip(input1X, -1, 1);
-            Range.clip(input2X, -1, 1);
+            //method for moving the bottom fork
+            MoveFork();
 
-            robot.frontRight.setPower(input1Y - input1X - input2X);
-            robot.frontLeft.setPower(input1Y - input1X + input2X);
-            robot.backRight.setPower(input1Y + input1X - input2X);
-            robot.backLeft.setPower(input1Y + input1X + input2X);
-
-            // Use gamepad left & right Bumpers to open and close the claw
-            if (gamepad1.right_bumper)
-                clawOffset += CLAW_SPEED;
-            else if (gamepad1.left_bumper)
-                clawOffset -= CLAW_SPEED;
-
-            /* Move both servos to new position.  Assume servos are mirror image of each other.
-            clawOffset = Range.clip(clawOffset, -0.5, 0.5);
-            robot.leftClaw.setPosition(robot.MID_SERVO + clawOffset);
-            robot.rightClaw.setPosition(robot.MID_SERVO - clawOffset);
-
-            // Use gamepad buttons to move arm up (Y) and down (A)
-            if (gamepad1.y)
-                robot.armMotor.setPower(robot.ARM_UP_POWER);
-            else if (gamepad1.a)
-                robot.armMotor.setPower(robot.ARM_DOWN_POWER);
-            else
-                robot.armMotor.setPower(0.0);
-
-            // Send telemetry message to signify robot running;
-            telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-            telemetry.addData("left",  "%.2f", left);
-            telemetry.addData("right", "%.2f", right);
-            telemetry.update();
+            //set power of the wheels
+            robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
+            robot.frontLeft.setPower(Range.clip(-input1Y - input1X + input1Z, -1, 1));
+            robot.backRight.setPower(Range.clip(input1Y + input1X + input1Z, -1, 1));
+            robot.backLeft.setPower(Range.clip(input1Y - input1X - input1Z, -1, 1));
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);
-        }*/
+        }
+    }
+
+    public void JoyStickVals() {
+        //Update Joystick values
+        input1Y = Math.pow(-gamepad1.left_stick_y, 2);
+
+        input1X = Math.pow(gamepad1.left_stick_x, 2);
+
+        input1Z = Math.pow(gamepad1.right_stick_x, 2);
+    }
+
+
+    public void MoveFork()
+    {
+        //retracted position
+        int closePos = 0;
+        //open position
+        int openPos = 180;
+
+        // Corresponds to the a button on gamepad 2
+        boolean aButton = gamepad2.a;
+
+        // Corresponds to the b button on gamepad 2
+        boolean bButton = gamepad2.b;
+
+        if(aButton)
+        {
+            robot.forkServo.setPosition(openPos);
+        }
+        else if (bButton)
+        {
+            robot.forkServo.setPosition(closePos);
+        }
+        else
+        {
+            telemetry.addData("Say", "Fork servo not moving.");
+            telemetry.update();
+        }
     }
 }

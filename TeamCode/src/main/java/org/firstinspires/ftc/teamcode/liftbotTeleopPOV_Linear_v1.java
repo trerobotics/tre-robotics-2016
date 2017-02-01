@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 
-@TeleOp(name="liftbot: Test", group="liftbot")
+@TeleOp(name="TeleOp: Non-linear Controls", group="liftbot")
 public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
 
     /* Declare OpMode members. */
