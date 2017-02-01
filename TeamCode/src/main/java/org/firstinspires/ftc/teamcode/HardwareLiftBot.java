@@ -56,8 +56,7 @@ public class HardwareLiftBot
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // motors that do not use encoders
 
-        // Define and initialize ALL installed servos.
-        //forkServo.setPosition(0);
+
     }
 
     /***
