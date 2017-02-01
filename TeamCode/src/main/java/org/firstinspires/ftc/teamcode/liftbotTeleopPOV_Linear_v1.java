@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -43,7 +44,9 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
     /* Declare OpMode members. */
     HardwareLiftBot robot = new HardwareLiftBot();
 
-    double input1X, input1Y, input1Z;
+    private double input1X, input1Y, input1Z;
+    private Gamepad gamepad1 = new Gamepad();
+    private Gamepad gamepad2 = new Gamepad();
 
     @Override
     public void runOpMode() {
@@ -58,10 +61,10 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Update the values of the joystick
-            JoyStickVals();
+            robot.joyStickvalsNonLinear(gamepad1, gamepad2);
 
             //method for moving the bottom fork
-            MoveFork();
+            robot.MoveFork(gamepad1, gamepad2);
 
             //set power of the wheels
             robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
@@ -71,43 +74,6 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);
-        }
-    }
-
-    public void JoyStickVals() {
-        //Update Joystick values
-        input1Y = Math.pow(-gamepad1.left_stick_y, 2);
-
-        input1X = Math.pow(gamepad1.left_stick_x, 2);
-
-        input1Z = Math.pow(gamepad1.right_stick_x, 2);
-    }
-
-    public void MoveFork()
-    {
-        //retracted position
-        int closePos = 0;
-        //open position
-        int openPos = 180;
-
-        // Corresponds to the a button on gamepad 2
-        boolean aButton = gamepad2.a;
-
-        // Corresponds to the b button on gamepad 2
-        boolean bButton = gamepad2.b;
-
-        if(aButton)
-        {
-            robot.forkServo.setPosition(openPos);
-        }
-        else if (bButton)
-        {
-            robot.forkServo.setPosition(closePos);
-        }
-        else
-        {
-            telemetry.addData("Say", "Fork servo not moving.");
-            telemetry.update();
         }
     }
 }

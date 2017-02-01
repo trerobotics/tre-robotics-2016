@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -66,6 +67,8 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
                                                                // could also use HardwarePushbotMatrix class.
 
     double input1Y, input1X, input1Z;
+    private Gamepad gamepad1 = new Gamepad();
+    private Gamepad gamepad2 = new Gamepad();
 
     @Override
     public void runOpMode() {
@@ -82,7 +85,7 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Update the values of the joystick
-            JoyStickVals();
+            robot.joyStickValsLinear(gamepad1, gamepad2);
 
             //method for moving the bottom fork
             MoveFork();
@@ -96,15 +99,6 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);
         }
-    }
-
-    public void JoyStickVals() {
-        //Update Joystick values
-        input1Y = Math.pow(-gamepad1.left_stick_y, 2);
-
-        input1X = Math.pow(gamepad1.left_stick_x, 2);
-
-        input1Z = Math.pow(gamepad1.right_stick_x, 2);
     }
 
 
