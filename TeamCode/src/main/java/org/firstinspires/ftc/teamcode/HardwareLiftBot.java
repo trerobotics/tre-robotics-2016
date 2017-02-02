@@ -11,10 +11,11 @@ import com.qualcomm.robotcore.util.Range;
 public class HardwareLiftBot
 {
     /* Public OpMode members. */
-    public DcMotor frontLeft = null;
-    public DcMotor frontRight = null;
-    public DcMotor backLeft = null;
-    public DcMotor backRight = null;
+    public DcMotor frontLeft    = null;
+    public DcMotor frontRight   = null;
+    public DcMotor backLeft     = null;
+    public DcMotor backRight    = null;
+    public DcMotor Thrower      = null;
     public Servo forkServo      = null;
 
     /* local OpMode members. */
@@ -37,6 +38,7 @@ public class HardwareLiftBot
         frontLeft = hwMap.dcMotor.get("topLeftDrive");
         frontRight = hwMap.dcMotor.get("topRightDrive");
         forkServo   = hwMap.servo.get("forkServo");
+        Thrower     = hwMap.dcMotor.get("Thrower");
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
         frontLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -49,12 +51,14 @@ public class HardwareLiftBot
         backRight.setPower(0);
         frontLeft.setPower(0);
         frontRight.setPower(0);
+        Thrower.setPower(0);
 
         //Set all motors to run with encoders.
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Thrower.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // motors that do not use encoders
 
 
@@ -137,6 +141,38 @@ public class HardwareLiftBot
         else if (bButton)
         {
             forkServo.setPosition(closePos);
+        }
+    }
+
+    public void BallThrower(Gamepad gamepad1, Gamepad gamepad2)
+    {
+        double moveArm = gamepad2.right_stick_y;
+        double throwSpeed = 1;
+        double pickUpSpeed = .3;
+
+        boolean throwBall = gamepad2.right_bumper;
+        boolean pickUpBall = gamepad2.left_bumper;
+
+        Thrower.setPower(moveArm);
+
+        int moveDistance = 1440;
+        if (throwBall)
+        {
+            int newThrowDistance = Thrower.getCurrentPosition() + moveDistance;
+
+            Thrower.setTargetPosition(newThrowDistance);
+            Thrower.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Thrower.setPower(throwSpeed);
+        } else if (pickUpBall)
+        {
+            int newPickUpPosition = Thrower.getCurrentPosition() - moveDistance;
+
+            Thrower.setTargetPosition(newPickUpPosition);
+            Thrower.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Thrower.setPower(pickUpSpeed);
+        } else
+        {
+            Thrower.setPower(0);
         }
     }
 }

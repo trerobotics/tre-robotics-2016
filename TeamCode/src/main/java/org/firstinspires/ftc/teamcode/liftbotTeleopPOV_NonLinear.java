@@ -62,6 +62,8 @@ public class liftbotTeleopPOV_NonLinear extends LinearOpMode {
             //Update the values of the joystick
             robot.NonLinearMovement(gamepad1, gamepad2);
 
+            robot.BallThrower(gamepad1, gamepad2);
+
             //method for moving the bottom fork
             robot.MoveFork(gamepad1, gamepad2);
 
