@@ -144,6 +144,10 @@ public class HardwareLiftBot
         }
     }
 
+    public int bottomStartPoint = 20;
+    public int topEndPoint = 1300;
+    public double armSetPositionSpeed = .3;
+
     public void BallThrower(Gamepad gamepad1, Gamepad gamepad2)
     {
         double moveArm = gamepad2.right_stick_y;
@@ -155,7 +159,32 @@ public class HardwareLiftBot
 
         Thrower.setPower(moveArm);
 
-        int moveDistance = 1440;
+        //This block of code is for when someone is trying to throw the ball but the arm
+        //is not in the right position. This will move the arm to a designated
+        // position
+        if (throwBall && Thrower.getCurrentPosition() != bottomStartPoint)
+        {
+            do {
+                Thrower.setTargetPosition(Thrower.getCurrentPosition() + 1);
+                Thrower.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Thrower.setPower(armSetPositionSpeed);
+
+            } while (Thrower.getTargetPosition() != bottomStartPoint);
+        }
+
+        if (pickUpBall && Thrower.getCurrentPosition() != topEndPoint)
+        {
+            do {
+                Thrower.setTargetPosition(Thrower.getCurrentPosition() - 1);
+                Thrower.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Thrower.setPower(armSetPositionSpeed);
+            } while (Thrower.getTargetPosition() != topEndPoint);
+        }
+
+        //calculate the distance the arm needs to move by  subtracting the largest
+        //value the encoder will travel by the minimum
+        // TODO: 2/2/2017 Make sure this works as the motor will most likely travel more than 1 rotation and will loop back causing math problems
+        int moveDistance = topEndPoint - bottomStartPoint;
         if (throwBall)
         {
             int newThrowDistance = Thrower.getCurrentPosition() + moveDistance;
