@@ -88,7 +88,7 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
             robot.joyStickValsLinear(gamepad1, gamepad2);
 
             //method for moving the bottom fork
-            MoveFork();
+            robot.MoveFork(gamepad1, gamepad2);
 
             //set power of the wheels
             robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
@@ -102,31 +102,5 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
     }
 
 
-    public void MoveFork()
-    {
-        //retracted position
-        int closePos = 0;
-        //open position
-        int openPos = 180;
 
-        // Corresponds to the a button on gamepad 2
-        boolean aButton = gamepad2.a;
-
-        // Corresponds to the b button on gamepad 2
-        boolean bButton = gamepad2.b;
-
-        if(aButton)
-        {
-            robot.forkServo.setPosition(openPos);
-        }
-        else if (bButton)
-        {
-            robot.forkServo.setPosition(closePos);
-        }
-        else
-        {
-            telemetry.addData("Say", "Fork servo not moving.");
-            telemetry.update();
-        }
-    }
 }
