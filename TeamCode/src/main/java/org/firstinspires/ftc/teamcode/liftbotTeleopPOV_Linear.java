@@ -91,7 +91,7 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
             robot.MoveFork(gamepad1, gamepad2);
 
             //set power of the wheels
-            robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
+            robot.frontRight.setPower(Range.clip(-input1X + input1X - input1Z, -1, 1));
             robot.frontLeft.setPower(Range.clip(-input1Y - input1X + input1Z, -1, 1));
             robot.backRight.setPower(Range.clip(input1Y + input1X + input1Z, -1, 1));
             robot.backLeft.setPower(Range.clip(input1Y - input1X - input1Z, -1, 1));

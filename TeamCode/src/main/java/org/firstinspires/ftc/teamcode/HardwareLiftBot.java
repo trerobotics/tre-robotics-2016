@@ -89,11 +89,14 @@ public class HardwareLiftBot
     // on the joysticks.
     public void joyStickvalsNonLinear(Gamepad gamepad1, Gamepad gamepad2)
     {
+
         double input1Y = Math.pow(-gamepad1.left_stick_y, 2);
 
         double input1X = Math.pow(gamepad1.left_stick_x, 2);
 
         double input1Z = Math.pow(gamepad1.right_stick_x, 2);
+
+
     }
 
     // Gets the values of the joystick values and keeps them at a linear -1 to 1
