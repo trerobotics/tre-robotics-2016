@@ -35,11 +35,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.util.Range;
 
 
 @TeleOp(name="TeleOp: Non-linear Controls", group="liftbot")
-public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
+public class liftbotTeleopPOV_NonLinear extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareLiftBot robot = new HardwareLiftBot();
@@ -61,16 +60,10 @@ public class liftbotTeleopPOV_Linear_v1 extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Update the values of the joystick
-            robot.joyStickvalsNonLinear(gamepad1, gamepad2);
+            robot.NonLinearMovement(gamepad1, gamepad2);
 
             //method for moving the bottom fork
             robot.MoveFork(gamepad1, gamepad2);
-
-            //set power of the wheels
-            robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
-            robot.frontLeft.setPower(Range.clip(-input1Y - input1X + input1Z, -1, 1));
-            robot.backRight.setPower(Range.clip(input1Y + input1X + input1Z, -1, 1));
-            robot.backLeft.setPower(Range.clip(input1Y - input1X - input1Z, -1, 1));
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);

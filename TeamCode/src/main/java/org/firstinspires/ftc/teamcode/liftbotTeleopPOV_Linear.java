@@ -32,39 +32,15 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.RobotLog;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
-
-/**
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
- * All device access is managed through the HardwarePushbot class.
- * The code is structured as a LinearOpMode
- *
- * This particular OpMode executes a POV Game style Teleop for a PushBot
- * In this mode the left stick moves the robot FWD and back, the Right stick turns left and right.
- * It raises and lowers the claw using the Gampad Y and A buttons respectively.
- * It also opens and closes the claws slowly using the left and right Bumper buttons.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 
 @TeleOp(name="TeleOp: linear Controls", group="liftbot")
-
 public class liftbotTeleopPOV_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareLiftBot robot           = new HardwareLiftBot();   // Use a Pushbot's hardware
-                                                               // could also use HardwarePushbotMatrix class.
+    HardwareLiftBot robot           = new HardwareLiftBot();
 
     double input1Y, input1X, input1Z;
     private Gamepad gamepad1 = new Gamepad();
@@ -73,9 +49,7 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        /* Initialize the hardware variables.
-         * The init() method of the hardware class does all the work here
-         */
+        // Initialize the hardware variables.
         robot.init(hardwareMap);
 
         // Wait for the game to start (driver presses PLAY)
@@ -85,22 +59,13 @@ public class liftbotTeleopPOV_Linear extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Update the values of the joystick
-            robot.joyStickValsLinear(gamepad1, gamepad2);
+            robot.LinearMovement(gamepad1, gamepad2);
 
             //method for moving the bottom fork
             robot.MoveFork(gamepad1, gamepad2);
-
-            //set power of the wheels
-            robot.frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
-            robot.frontLeft.setPower(Range.clip(-input1Y - input1X + input1Z, -1, 1));
-            robot.backRight.setPower(Range.clip(input1Y + input1X + input1Z, -1, 1));
-            robot.backLeft.setPower(Range.clip(input1Y - input1X - input1Z, -1, 1));
 
             // Pause for metronome tick.  40 mS each cycle = update 25 times a second.
             robot.waitForTick(40);
         }
     }
-
-
-
 }

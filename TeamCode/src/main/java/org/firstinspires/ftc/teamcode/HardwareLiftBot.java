@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import com.qualcomm.robotcore.util.Range;
 
 
 public class HardwareLiftBot
@@ -87,23 +87,33 @@ public class HardwareLiftBot
 
     // Gets the values of the joystick values and squares them. This creates finer control as you get closer to zero
     // on the joysticks.
-    public void joyStickvalsNonLinear(Gamepad gamepad1, Gamepad gamepad2)
+    public void NonLinearMovement(Gamepad gamepad1, Gamepad gamepad2)
     {
         double input1Y = Math.pow(-gamepad1.left_stick_y, 2);
 
         double input1X = Math.pow(gamepad1.left_stick_x, 2);
 
         double input1Z = Math.pow(gamepad1.right_stick_x, 2);
+
+        frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
+        frontLeft.setPower(Range.clip(-input1Y - input1X + input1Z, -1, 1));
+        backRight.setPower(Range.clip(input1Y + input1X + input1Z, -1, 1));
+        backLeft.setPower(Range.clip(input1Y - input1X - input1Z, -1, 1));
     }
 
     // Gets the values of the joystick values and keeps them at a linear -1 to 1
-    public void joyStickValsLinear(Gamepad gamepad1, Gamepad gamepad2)
+    public void LinearMovement(Gamepad gamepad1, Gamepad gamepad2)
     {
         double input1Y = -gamepad1.left_stick_y;
 
         double input1X = gamepad1.left_stick_x;
 
         double input1Z = gamepad1.right_stick_x;
+
+        frontRight.setPower(Range.clip(-input1Y + input1X - input1Z, -1, 1));
+        frontLeft.setPower(Range.clip(-input1Y - input1X + input1Z, -1, 1));
+        backRight.setPower(Range.clip(input1Y + input1X + input1Z, -1, 1));
+        backLeft.setPower(Range.clip(input1Y - input1X - input1Z, -1, 1));
     }
 
     // Sets the fork servo to a defined position based on whether the driver wants it open or closed.
